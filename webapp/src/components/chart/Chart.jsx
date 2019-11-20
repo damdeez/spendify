@@ -26,19 +26,21 @@ const Chart = () => {
   return (
     <div className='pie-chart-wrapper' css={chartWrapperStyle}>
       <h4>What you&apos;re spending your money on: </h4>
-      <BarChart
-        data={chartData}
-        height={150}
-        margin={{
-          top: 5, right: 20, left: 20, bottom: 5
-        }}
-        width={500}
-      >
-        <XAxis dataKey='category' />
-        <YAxis />
-        <Tooltip />
-        <Bar dataKey='amount' fill='#9d152f' />
-      </BarChart>
+      {chartData && chartData.length ? (
+        <BarChart
+          data={chartData}
+          height={150}
+          margin={{
+            top: 5, right: 20, left: 20, bottom: 5
+          }}
+          width={500}
+        >
+          <XAxis dataKey='category' />
+          <YAxis />
+          <Tooltip />
+          <Bar dataKey='amount' fill='#9d152f' />
+        </BarChart>
+      ) : 'No transactions! Wow, spend some of that cash!'}
     </div>
   )
 }
