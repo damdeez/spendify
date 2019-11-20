@@ -59,7 +59,6 @@ const EditTransaction = ({
   return (
     <div className='edit-transaction-wrapper' css={editTransactionStyle}>
       <form className='edit-transaction-form' css={editTransactionForm}>
-        {console.info('Editing:', description, amount, transactionId)}
         <h4>Edit Transaction</h4>
         {error && <p className='upload-error'>There was an error adding your transaction because one or more required fields are empty or null</p>}
         <div className='edit-transaction-form-wrapper'>
