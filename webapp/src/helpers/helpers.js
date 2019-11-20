@@ -32,15 +32,15 @@ export function validateUploadedData (data) {
   }
 
   data.forEach(t => {
-    // if any required fields on upload are null, return false
+    // if any required fields on upload are null or not there, return false
     if (
-      t.amount === null ||
-      t.category === null ||
+      t.amount === null || t.amount === 0 ||
+      t.category === null || t.category === '' ||
       t.credit === null ||
       t.debit === null ||
-      t.description === null ||
-      t.merchant_id === null ||
-      t.user_id === null
+      t.description === null || t.description === '' ||
+      t.merchant_id === null || t.merchant_id === '' ||
+      t.user_id === null || t.user_id === ''
     ) {
       isValid = false
     }
