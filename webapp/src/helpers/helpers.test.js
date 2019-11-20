@@ -68,6 +68,19 @@ describe('validateUploadedData function', () => {
     }]
     expect(validateUploadedData(data)).toEqual(false)
   })
+
+  it('Iterates the data and returns false if any of the values empty strings', () => {
+    const data = [{
+      credit: true,
+      debit: false,
+      amount: 20,
+      category: '',
+      description: 'paycheck',
+      merchant_id: 123,
+      user_id: 321
+    }]
+    expect(validateUploadedData(data)).toEqual(false)
+  })
 })
 
 describe('buildDataForChart function', () => {

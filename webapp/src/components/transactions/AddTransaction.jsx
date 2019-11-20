@@ -11,8 +11,7 @@ const AddTransaction = () => {
     openForm
     // toggleForm
   ] = useState(true)
-  const [error, setError] = useState(false)
-  const [formData, setFormData] = useState({
+  const formInitialState = {
     amount: null,
     debit: false,
     credit: false,
@@ -22,7 +21,9 @@ const AddTransaction = () => {
     transactionId: null,
     category: null,
     user_id: '123'
-  })
+  }
+  const [error, setError] = useState(false)
+  const [formData, setFormData] = useState(formInitialState)
   const [addTransaction] = useMutation(ADD_TRANSACTION)
   const transactionId = uuidv4()
   const handleFormInput = (e) => setFormData({
@@ -40,7 +41,8 @@ const AddTransaction = () => {
     if (!validData) {
       return setError(true)
     }
-
+    setFormData(formInitialState)
+    setError(false)
     // toggleForm(false)
     return addTransaction({
       variables: formData
@@ -56,32 +58,32 @@ const AddTransaction = () => {
           <div className='add-transaction-form-wrapper'>
             <div className='input-wrapper'>
               <label htmlFor='amount'>Amount</label>
-              <input id='amount' name='amount' onChange={handleFormInput} type='number' />
+              <input id='amount' name='amount' onChange={handleFormInput} type='number' value={formData.amount || ''} />
             </div>
             <div className='input-wrapper'>
               <label htmlFor='description'>Description</label>
-              <input id='description' name='description' onChange={handleFormInput} type='text' />
+              <input id='description' name='description' onChange={handleFormInput} type='text' value={formData.description || ''} />
             </div>
             <div className='input-wrapper'>
               <label htmlFor='category'>Category</label>
-              <input id='category' name='category' onChange={handleFormInput} type='text' />
+              <input id='category' name='category' onChange={handleFormInput} type='text' value={formData.category || ''} />
             </div>
             <div className='input-wrapper'>
               <label htmlFor='merchant_id'>Merchant ID</label>
-              <input id='merchant_id' name='merchant_id' onChange={handleFormInput} type='text' />
+              <input id='merchant_id' name='merchant_id' onChange={handleFormInput} type='text' value={formData.merchant_id || ''} />
             </div>
             <div className='input-wrapper'>
               <label htmlFor='dateAdded'>Date</label>
-              <input id='dateAdded' name='dateAdded' onChange={handleFormInput} type='date' />
+              <input id='dateAdded' name='dateAdded' onChange={handleFormInput} type='date' value={formData.dateAdded || ''} />
             </div>
             <div className='input-wrapper debit-credit-wrapper'>
               <span className='credit-wrapper'>
                 <label htmlFor='credit'>Credit</label>
-                <input id='credit' name='credit-debit' onChange={handleRadioButtons} type='radio' value='credit' />
+                <input checked={formData.credit} id='credit' name='credit-debit' onChange={handleRadioButtons} type='radio' value='credit' />
               </span>
               <span className='debit-wrapper'>
                 <label htmlFor='debit'>Debit</label>
-                <input id='debit' name='credit-debit' onChange={handleRadioButtons} type='radio' value='debit' />
+                <input checked={formData.debit} id='debit' name='credit-debit' onChange={handleRadioButtons} type='radio' value='debit' />
               </span>
             </div>
           </div>
