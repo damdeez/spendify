@@ -2,9 +2,11 @@ import React, { Fragment, useState, useEffect } from 'react'
 import { css } from '@emotion/core'
 import { useLazyQuery, useMutation } from '@apollo/react-hooks'
 
+import EditTransaction from './EditTransaction'
 import { GET_ADDED_TRANSACTIONS, DELETE_TRANSACTION } from '../../queries/queries'
 
 const Transactions = () => {
+  const [showEditFormId, setEditFormShow] = useState('')
   const [getAddedTransactions, { data }] = useLazyQuery(
     GET_ADDED_TRANSACTIONS,
     {
@@ -26,42 +28,61 @@ const Transactions = () => {
   }, [data])
 
   return (
-    <Fragment>
+    <div className='transactions-container'>
       <h3>Transactions</h3>
       {transactions.length ? transactions.map((transaction, i) => {
         return (
-          <div className='transaction-card' css={transactionStyle} key={i}>
-            <div className='transaction-wrapper'>
-              <div className='transaction-description-wrapper' css={transactionWrapperStyle}>
-                <div className='transaction-description'>
-                  {transaction.description}
-                </div>
-                {transaction.credit ? (
-                  <div className='transaction-amount positive'>
-                    ${transaction.amount}
+          <Fragment key={i}>
+            <div className='transaction-card' css={transactionStyle}>
+              <div className='transaction-wrapper'>
+                <div className='transaction-description-wrapper' css={transactionWrapperStyle}>
+                  <div className='transaction-description'>
+                    {transaction.description}
                   </div>
+                  {transaction.credit ? (
+                    <div className='transaction-amount positive'>
+                      ${transaction.amount}
+                    </div>
+                  ) : (
+                    <div className='transaction-amount negative'>
+                      -${transaction.amount}
+                    </div>
+                  )}
+                </div>
+                <div className='transaction-category-date-wrapper'>
+                  <div className='transaction-category'>
+                    Category: <span>{transaction.category}</span>
+                  </div>
+                  <div className='transaction-date'>
+                    Date Added: {transaction.dateAdded}
+                  </div>
+                </div>
+              </div>
+              <div className='transaction-actions'>
+                {showEditFormId !== transaction.transactionId ? (
+                  <button className='edit-btn' css={transactionActionsBtnStyle} onClick={() => setEditFormShow(transaction.transactionId)}>EDIT</button>
                 ) : (
-                  <div className='transaction-amount negative'>
-                    -${transaction.amount}
-                  </div>
+                  <button className='cancel-btn' css={transactionActionsBtnStyle} onClick={() => setEditFormShow('')}>CANCEL</button>
                 )}
-              </div>
-              <div className='transaction-category-date-wrapper'>
-                <div className='transaction-category'>
-                  Category: {transaction.category}
-                </div>
-                <div className='transaction-date'>
-                  Date Added: {transaction.dateAdded}
-                </div>
+                <button className='remove-btn' css={transactionActionsBtnStyle} onClick={() => handleDeletion(transaction.transactionId)}>REMOVE</button>
               </div>
             </div>
-            <div className='transaction-actions'>
-              <button className='remove-btn' css={transactionActionsBtnStyle} onClick={() => handleDeletion(transaction.transactionId)}>REMOVE</button>
-            </div>
-          </div>
+            <EditTransaction
+              amount={transaction.amount}
+              category={transaction.category}
+              credit={transaction.credit}
+              dateAdded={transaction.dateAdded}
+              debit={transaction.debit}
+              description={transaction.description}
+              merchantId={transaction.merchantId}
+              setEditFormShow={setEditFormShow}
+              showEditFormId={showEditFormId}
+              transactionId={transaction.transactionId}
+            />
+          </Fragment>
         )
       }) : 'No Transactions uploaded'}
-    </Fragment>
+    </div>
   )
 }
 
@@ -86,10 +107,14 @@ const transactionStyle = css`
     display: flex;
     justify-content: space-between;
   }
+
+  .transaction-category > span {
+    text-transform: capitalize;
+  }
 `
 
 const transactionWrapperStyle = css`
-  min-width: 120px;
+  min-width: 150px;
 
   .transaction-category-date-wrapper {
     font-size: 14px;
@@ -112,10 +137,6 @@ const transactionWrapperStyle = css`
       color: #9d152f;
     }
   }
-
-  .transaction-category {
-    text-transform: capitalize;
-  }
 `
 
 const transactionActionsBtnStyle = css`
@@ -127,28 +148,7 @@ const transactionActionsBtnStyle = css`
   font-size: 13px;
   padding: 8px 15px;
 
-  &.remove-btn {
-    &:hover,
-    &:focus {
-      background-color: #9d152f;
-      border: 1px solid #9d152f;
-      color: #ffffff;
-      cursor: pointer;
-    }
-  }
-
-  &.save-btn {
-    &:hover,
-    &:focus {
-      background-color: #159D6C;
-      border: 1px solid #159D6C;
-      color: #ffffff;
-      cursor: pointer;
-    }
-  }
-
-  &:hover,
-  &:focus {
+  &:hover {
     background-color: #000000;
     color: #ffffff;
     cursor: pointer;
@@ -156,6 +156,25 @@ const transactionActionsBtnStyle = css`
 
   &:first-of-type {
     margin-right: 10px;
+  }
+
+  &.cancel-btn,
+  &.remove-btn {
+    &:hover {
+      background-color: #9d152f;
+      border: 1px solid #9d152f;
+      color: #ffffff;
+      cursor: pointer;
+    }
+  }
+
+  &.edit-btn {
+    &:hover {
+      background-color: #159D6C;
+      border: 1px solid #159D6C;
+      color: #ffffff;
+      cursor: pointer;
+    }
   }
 `
 
