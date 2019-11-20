@@ -28,7 +28,7 @@
 5) And thats it! You can see the app on http://localhost:3000/ in your browser
 
 ## Cleaning Up the DB
-- If you want to clean up the DB, in your Terminal run the mongo comand fillowed by the `use` and `db`:
+- If you want to clean up the DB, in your Terminal run the `mongo` shell command followed by the `use` and `db` like so:
   ```bash
     mongo
     use graphql
@@ -38,7 +38,6 @@
 
 ## TODOs
 - Write more/better tests
-- Edit Transaction button and functionality
 - Make app more mobile friendly
 - User functionality including auth
 - Predefined categories
