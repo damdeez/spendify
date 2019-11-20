@@ -55,7 +55,7 @@ const chartWrapperStyle = css`
   height: 200px;
 
   h4 {
-    margin: 10px 0 10px 40px;
+    margin: 10px 0 10px;
   }
 `
 
